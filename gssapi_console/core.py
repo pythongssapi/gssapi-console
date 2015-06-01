@@ -31,15 +31,21 @@ Python {ver} on {platform}
 Type "help", "copyright", "credits" or "license" for more information about Python.
 
 Functions for controlling the realm are available in `REALM`.
+Session: {session}
 Mechansim: {mech} ({driver}), Realm: {realm}, User: {user}, Host: {host}"""
 
 
 class GSSAPIConsole(code.InteractiveConsole):
-    def __init__(self, driver_cls, use_readline=True, realm_args={}, *args, **kwargs):
+    def __init__(self, driver_cls, use_readline=True, realm_args={},
+                 attach=None, *args, **kwargs):
         code.InteractiveConsole.__init__(self, *args, **kwargs)
 
         self._driver = driver_cls()
-        self.realm = self._driver.create_realm(realm_args)
+        if attach is None:
+            self.realm = self._driver.create_realm(realm_args)
+        else:
+            self.realm = self._driver.attach_to_realm(attach, realm_args)
+
         self.locals['REALM'] = self.realm
 
         self.runsource('import gssapi')
@@ -58,8 +64,13 @@ class GSSAPIConsole(code.InteractiveConsole):
         self.runsource(READLINE_SRC, '<readline setup>', 'exec')
 
     @property
+    def session(self):
+        return self._driver.identifier(self.realm)
+
+    @property
     def banner_text(self):
         return BANNER.format(ver=sys.version, platform=sys.platform,
+                             session=self.session,
                              mech=self._driver.MECH_NAME,
                              driver=self._driver.PROVIDER_NAME,
                              realm=self.realm.realm,
@@ -70,4 +81,5 @@ class GSSAPIConsole(code.InteractiveConsole):
         if banner is None:
             banner = self.banner_text
 
-        super(GSSAPIConsole, self).interact(banner)
+        # Python 2.7 uses old-style classes :-(
+        code.InteractiveConsole.interact(self, banner)

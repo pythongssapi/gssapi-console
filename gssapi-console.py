@@ -2,6 +2,8 @@
 
 # interactive console with easy access to krb5 test harness stuff
 
+from __future__ import print_function
+
 import argparse
 import os
 import sys
@@ -25,6 +27,11 @@ parser.add_argument('--realm-args', default=None,
 parser.add_argument('--mech', default='krb5',
                     help='Which environment to setup up '
                          '(supports krb5 [default])')
+parser.add_argument('-a', '--attach', metavar='IDENTIFIER', nargs='?',
+                    default=None, dest='attach',
+                    help='Attach to an existing gssapi-console environment, '
+                         'indicated by IDENTIFIER.')
+
 
 PARSED_ARGS = parser.parse_args()
 
@@ -48,7 +55,7 @@ SAVED_ENV = None
 try:
     # import the env
     SAVED_ENV = copy.deepcopy(os.environ)
-    console = GSSAPIConsole(mech_cls, realm_args=realm_args)
+    console = GSSAPIConsole(mech_cls, realm_args=realm_args, attach=PARSED_ARGS.attach)
     for k, v in console.realm.env.items():
         os.environ[k] = v
 
@@ -57,6 +64,8 @@ try:
     if PARSED_ARGS.file is not None:
         if not PARSED_ARGS.force_interactive:
             INTER = False
+
+        print('Session: {0}'.format(console.session))
 
         with open(PARSED_ARGS.file) as src:
             console.runsource(src.read(), src.name, 'exec')
