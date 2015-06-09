@@ -43,13 +43,12 @@ except StopIteration:
              'GSSAPI console' % PARSED_ARGS.mech)
 
 mech_cls = mech_cls_loader.load()
-console = GSSAPIConsole(mech_cls, realm_args=realm_args)
-
 SAVED_ENV = None
 
 try:
     # import the env
     SAVED_ENV = copy.deepcopy(os.environ)
+    console = GSSAPIConsole(mech_cls, realm_args=realm_args)
     for k, v in console.realm.env.items():
         os.environ[k] = v
 
@@ -76,4 +75,4 @@ finally:
             else:
                 del os.environ[k]
 
-    console.realm.stop()
+    console.stop()

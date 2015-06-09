@@ -51,6 +51,9 @@ class GSSAPIConsole(code.InteractiveConsole):
         if os.environ.get('LD_LIBRARY_PATH'):
             self.realm.env['LD_LIBRARY_PATH'] = os.environ['LD_LIBRARY_PATH']
 
+    def stop(self):
+        self._driver.destroy_realm(self.realm)
+
     def _add_readline(self):
         self.runsource(READLINE_SRC, '<readline setup>', 'exec')
 

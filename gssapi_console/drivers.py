@@ -8,6 +8,9 @@ class GSSAPIConsoleDriver(object):
     def create_realm(self, realm_args):
         return None
 
+    def destroy_realm(self, realm):
+        return None
+
 
 class Krb5Console(GSSAPIConsoleDriver):
     MECH_NAME = 'krb5'
@@ -19,3 +22,6 @@ class Krb5Console(GSSAPIConsoleDriver):
 
     def create_realm(self, realm_args):
         return self._k5test.K5Realm(**realm_args)
+
+    def destroy_realm(self, realm):
+        realm.stop()
