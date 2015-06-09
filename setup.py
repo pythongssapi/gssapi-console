@@ -29,6 +29,9 @@ setup(
         'gssapi_console.drivers': [
             'krb5 = gssapi_console.drivers:Krb5Console',
         ],
+        'yalpt.env_drivers': [
+            'gssapi = gssapi_console.yalpt_driver:GSSAPIYalptDriver',
+        ],
     },
     install_requires=[
         'gssapi',
