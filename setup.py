@@ -35,6 +35,7 @@ setup(
     },
     install_requires=[
         'gssapi',
+        'k5test',
         'six'
     ]
 )

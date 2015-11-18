@@ -17,8 +17,8 @@ class Krb5Console(GSSAPIConsoleDriver):
     PROVIDER_NAME = 'MIT Kerberos 5'
 
     def __init__(self):
-        __import__('gssapi.tests.k5test')
-        self._k5test = sys.modules['gssapi.tests.k5test']
+        __import__('k5test')
+        self._k5test = sys.modules['k5test']
 
     def create_realm(self, realm_args):
         return self._k5test.K5Realm(**realm_args)
