@@ -8,6 +8,7 @@ import argparse
 import os
 import sys
 import copy
+import logging
 
 import pkg_resources as pkgres
 
@@ -31,9 +32,15 @@ parser.add_argument('-a', '--attach', metavar='IDENTIFIER', nargs='?',
                     default=None, dest='attach',
                     help='Attach to an existing gssapi-console environment, '
                          'indicated by IDENTIFIER.')
+parser.add_argument('-v' , '--verbose', default=False, action='store_const',
+                    dest='verbose', const=True,
+                    help='Use a more verbose logging level')
 
 
 PARSED_ARGS = parser.parse_args()
+
+if PARSED_ARGS.verbose:
+    logging.basicConfig(level=logging.DEBUG)
 
 realm_args = {}
 if PARSED_ARGS.realm_args:
