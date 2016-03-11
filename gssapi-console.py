@@ -60,6 +60,7 @@ mech_cls = mech_cls_loader.load()
 SAVED_ENV = None
 
 try:
+    console = None
     # import the env
     SAVED_ENV = copy.deepcopy(os.environ)
     console = GSSAPIConsole(mech_cls, realm_args=realm_args, attach=PARSED_ARGS.attach)
@@ -91,4 +92,5 @@ finally:
             else:
                 del os.environ[k]
 
-    console.stop()
+    if console is not None:
+        console.stop()
