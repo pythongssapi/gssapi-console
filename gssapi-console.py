@@ -53,8 +53,11 @@ try:
         pkgres.iter_entry_points('gssapi_console.drivers',
                                  name=PARSED_ARGS.mech))
 except StopIteration:
-    sys.exit('The %s environment is not supported by the '
-             'GSSAPI console' % PARSED_ARGS.mech)
+    print("The %s environment is not supported by the "
+          "GSSAPI console" % PARSED_ARGS.mech, file=sys.stderr)
+    print("If running from the source directory, you may need to "
+          "`pip install` first.", file=sys.stderr)
+    sys.exit(1)
 
 mech_cls = mech_cls_loader.load()
 SAVED_ENV = None
