@@ -17,6 +17,12 @@ Requirements
 * Requirements for the environment used (for example, the default environment is
   MIT krb5, which uses the [k5test](https://pypi.python.org/pypi/k5test))
 
+Setup
+-----
+
+gssapi-console will not work without first being installed.  If you are
+working from a local checkout, it suffices to do `pip install -e . .`.
+
 Usage
 -----
 
